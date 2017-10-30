@@ -1,0 +1,53 @@
+{% extends "aquarium/inventex.html" %}
+{% load static %}
+{% load jchart %}
+{% block content %}
+<div id="bienvenue" class="container">
+    {% if request.user.is_authenticated %}
+    <h1>Archives {{year}} de la {{ user.first_name|default:user.username }}!</h1>
+    {% else %}
+    <h1>Bienvenue!</h1>
+    {% endif %}
+
+
+{% if request.user.is_authenticated %}
+
+    <form action="/archive_of_year/{{year}}/" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Submit" />
+</form>
+
+    {% if achart %}
+    <h4>Temperature</h4>
+       {% render_chart achart 'Deg' %}
+    <h4>pH</h4>
+    <h5>Valeurs recommandées: 7,5 a 8,2</h5>
+    <p>A 8 le brome est actif à 80% alors que le chlore ne l'est plus qu'à 20%. De plus le brome n'est
+    pas sensible aux UV. Il a une triple action:
+    <ul>
+    <li>bactericide</li>
+    <li>algicide</li>
+    <li>oxydante</li>
+    </ul>
+    </p>
+
+       {% render_chart achart 'pH' %}
+    <h4>Redox</h4>
+    <p>La valeur doit se situer entre 650mV et 750mV.</p>
+    <h5>Horaires du st&eacute;rilomat</h5>
+        <ol>
+        <li>8h-8h15</li>
+        <li>9h-10h</li>
+        <li>11h15-12h30</li>
+        <li>14h30-15h30</li>
+        <li>18h-21h</li>
+        </ol>
+       {% render_chart achart 'Redox' %}
+    {% endif %}
+
+ {% endif %}
+
+</div>
+
+{% endblock %}

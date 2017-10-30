@@ -1,0 +1,136 @@
+{% extends "aquarium/inventex.html" %}
+{% load static %}
+{% load jchart %}
+{% block content %}
+<div id="bienvenue" class="container">
+    {% if request.user.is_authenticated %}
+
+<h1>Dernières mesures</h1>
+
+    <div class="row">
+            <div class="col-sm-4">
+                <table class="table">
+                  <thead>
+                     <tr>
+                        <th>Mesure</th>
+                        <th>Valeur</th>
+                        <th>Date</th>
+                     </tr>
+                  </thead>
+
+                  <tbody>
+                  <tr>
+                      <td>Température</td>
+                      <td>{{deg.celsius}}</td>
+                      <td>{{deg.date|date:"d/m/Y H:i" }} </td>
+                  </tr>
+                  <tr>
+                      <td>pH</td>
+                      <td>{{ph.phval}}</td>
+                      <td>{{ph.date|date:"d/m/Y H:i" }} </td>
+                  </tr>
+                  <tr>
+                      <td>Redox</td>
+                      <td>{{redox.redoxval}}</td>
+                      <td>{{redox.date|date:"d/m/Y H:i" }} </td>
+                  </tr>
+                </table>
+            </div>
+            <div class="col-sm-8">
+                {% render_chart todaychart "Deg" %}
+            </div>
+    </div>
+
+
+    <div class="row">
+            <div class="col-sm-6">
+                <h2>pH</h2>
+                {% render_chart todaychart "pH" %}
+            </div>
+            <div class="col-sm-6">
+                <h2>Redox</h2>
+                {% render_chart todaychart "Redox" %}
+            </div>
+    </div>
+
+    <div class="row">
+        <h1>Informations de dosage</h1>
+        <div class="col-sm-6">
+            <h2>pH</h2>
+            <h3>Valeurs recommandées: 7,5 à 8,2</h3>
+            <p>A 8 le brome est actif à 80% alors que le chlore ne l'est plus qu'à 20%. De plus le brome n'est
+                pas sensible aux UV. Il a une triple action:
+            <ul>
+             <li>bactericide</li>
+             <li>algicide</li>
+             <li>oxydante</li>
+            </ul>
+            </p>
+        </div>
+
+        <div class="col-sm-6">
+            <h2>Redox</h2>
+            <h3>Valeurs recommandées: 650mV à 750mV</h3>
+            <h3>Réglage du stérilomat</h3>
+            <ul>
+            <li>allongez les périodes de désinfection;</li>
+            <li>augmentez la dose en ouvrant la valve.</li>
+            </ul>
+            </p>
+
+            <h4>Horaires du stérilomat</h4>
+                <ol>
+                <li>8h-8h15</li>
+                <li>9h-10h</li>
+                <li>11h15-12h30</li>
+                <li>14h30-15h30</li>
+                <li>18h-21h</li>
+                </ol>
+
+        </div>
+    </div>
+
+    <h1>Valeurs cette semaine</h1>
+
+        <div class="row">
+            <div class="col-sm-6">
+                {% render_chart week_chart "Deg" %}
+            </div>
+            <div class="col-sm-6">
+                {% render_chart week_chart "pH" %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                {% render_chart week_chart "Redox" %}
+            </div>
+        </div>
+
+
+<h1>Derniers 30 jours</h1>
+
+    <div class="row">
+        <div class="col-sm-6">
+            {% render_chart last_30days_chart "Deg" %}
+        </div>
+        <div class="col-sm-6">
+            {% render_chart last_30days_chart "pH" %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-8">
+            {% render_chart last_30days_chart "Redox" %}
+        </div>
+    </div>
+
+
+  {% else %}
+    <h1>Veuillez vous annoncer</h1>
+    <ul>
+        <li>User: "grone"</li>
+        <li>Password: "raspigrone"</li>
+    </ul>
+  {% endif %}
+</div>
+
+{% endblock %}

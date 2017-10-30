@@ -1,0 +1,62 @@
+{% extends "aquarium/inventex.html" %}
+{% load static %}
+{% load jchart %}
+{% block content %}
+<div id="bienvenue" class="container">
+    {% if request.user.is_authenticated %}
+    <h1>Bienvenue {{ user.first_name|default:user.username }}!</h1>
+    {% else %}
+    <h1>Bienvenue!</h1>
+    {% endif %}
+
+
+
+
+<h1>Dernières mesures</h1>
+
+    <table class="table">
+      <thead>
+         <tr>
+            <th>Mesure</th>
+            <th>Valeur</th>
+            <th>Date</th>
+         </tr>
+      </thead>
+
+      <tbody>
+      <tr>
+          <td>Température</td>
+          <td>{{deg.celsius}}</td>
+          <td>{{deg.date|date:"d/m/Y H:i" }} </td>
+      </tr>
+      <tr>
+          <td>pH</td>
+          <td>{{ph.phval}}</td>
+          <td>{{ph.date|date:"d/m/Y H:i" }} </td>
+      </tr>
+      <tr>
+          <td>Redox</td>
+          <td>{{redox.redoxval}}</td>
+          <td>{{redox.date|date:"d/m/Y H:i" }} </td>
+      </tr>
+
+    </table>
+{% if request.user.is_authenticated %}
+
+    <h2>Aujourd'hui</h2>
+    {% render_chart chart 'today' '2017' %}
+
+    <h2>Semaine</h2>
+    {% render_chart chart 'last_week' '2017' %}
+
+    <h2>Mois</h2>
+    {% render_chart chart 'last_month' '2017' %}
+
+    <h2>Saison</h2>
+    {% render_chart chart 'season' '2017' %}
+
+ {% endif %}
+
+</div>
+
+{% endblock %}

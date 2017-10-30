@@ -1,0 +1,24 @@
+{% extends "aquarium/inventex.html" %}
+{% load static %}
+{% load jchart %}
+{% block content %}
+<div class="container">
+{% if request.user.is_authenticated %}
+    <div class="row">
+        <div class="col-sm-12">
+                {% render_chart year_chart "Deg" %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+                {% render_chart year_chart "pH" %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            {% render_chart year_chart "Redox" %}
+        </div>
+    </div>
+ {% endif %}
+</div>
+{% endblock %}
