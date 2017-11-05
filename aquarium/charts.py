@@ -50,17 +50,45 @@ class ArchiveChart(Chart):
         week_day = date.isoweekday()
         return date - timedelta(days=week_day - 1)
 
+    def get_today_date(self):
+        t0 = timezone.localtime()
+        today_midnight = timezone.datetime(year=t0.year, month=t0.month, day=t0.day)
+        today_midnight = timezone.make_aware(today_midnight)
+        return today_midnight.date()
+
+
+    def exists_today_data(self):
+        d = Deg.objects.last()
+        if d:
+            print("Last degree:", d)
+            return timezone.localtime().date() == d.date.date()
+        else:
+            print("No last data found")
+            return False
+
+    def get_end_day(self):
+        """Get the last hour of data: today or in the past."""
+        if self.exists_today_data():  # today and last data day are equal
+            return timezone.localtime()
+        else:
+            d = Deg.objects.last()
+            return d.date  # last hour of data
 
 
 class TodayChart(ArchiveChart):
 
     def __init__(self, user):
         self.user = user
-        t0 = timezone.localtime()
-        t1 = timezone.datetime(year=t0.year, month=t0.month, day=t0.day)  # exactly 00:00 hour
-        t1 = timezone.make_aware(t1)
-        self.start_date = t1
-        self.end_date = t0
+        d = Deg.objects.last()
+        self.start_date = None
+        self.end_date = self.get_end_day()
+        if self.exists_today_data(): # TODO: test it
+            self.start_date = self.get_today_date()  # today midnight
+        else:
+            # start = midnight of last day with data
+            self.start_date = timezone.datetime(year=d.date.year, month=d.date.month, day=d.date.day)
+            self.start_date = timezone.make_aware(self.start_date)
+            #self.end_date = d.date # last hour of data
         super(TodayChart, self).__init__(self.user, self.start_date, self.end_date)
 
     def set_label(self, msg="", start_date_str="", end_date_str=""):
@@ -73,11 +101,13 @@ class CurrentWeekChart(ArchiveChart):
 
     def __init__(self, user):
         self.user = user
-        t0 = ArchiveChart.get_first_day_of_week(timezone.localtime())
+        self.end_date = self.get_end_day()
+        #t0 = ArchiveChart.get_first_day_of_week(timezone.localtime())
+        t0 = ArchiveChart.get_first_day_of_week(self.end_date)
         t0 = timezone.datetime(year=t0.year, month=t0.month, day=t0.day)  # exactly 00:00 hour
         t0 = timezone.make_aware(t0)
         self.start_date = t0
-        self.end_date = timezone.localtime()
+        #self.end_date = timezone.localtime()
         super(CurrentWeekChart, self).__init__(self.user, self.start_date, self.end_date)
 
 

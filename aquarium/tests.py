@@ -1,4 +1,4 @@
-from django.test import LiveServerTestCase, Client
+from django.test import LiveServerTestCase, Client, TestCase
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User, Permission
 from datetime import timedelta
@@ -18,7 +18,7 @@ class AquariumTest(LiveServerTestCase):
     """
 
     # Those fixtures load data from 2016
-    #fixtures = ['DegNew.json', 'PhNew.json', 'RedoxNew.json'] #, 'Ph.json', 'Redox.json']
+    #fixtures = ['DegNew.json'] #, 'PhNew.json', 'RedoxNew.json'] #, 'Ph.json', 'Redox.json']
 
     def get_random_degree(self):
         deg_value = random.randint(3, 30)
@@ -27,8 +27,7 @@ class AquariumTest(LiveServerTestCase):
 
 
     def setUp(self):
-
-
+        self.grone_user = User.objects.get(username="grone")
         self.user_boss_passwd = 'titi_grognon234'
         self.user_boss = 'Boss'
         self.boss = User.objects.create_user(username=self.user_boss, password=self.user_boss_passwd,
@@ -36,7 +35,7 @@ class AquariumTest(LiveServerTestCase):
 
 
         Deg.objects.all().update(user=self.boss)
-        deg = Deg.objects.first()
+        #deg = Deg.objects.first()
 
         deg_content_type = ContentType.objects.get_for_model(Deg)
         self.add_deg_perm = Permission.objects.get(codename='add_deg', content_type=deg_content_type, )
@@ -50,8 +49,15 @@ class AquariumTest(LiveServerTestCase):
         self.boss.user_permissions.add(self.add_deg_perm, self.del_deg_perm)
         self.boss2.user_permissions.add(self.add_deg_perm, self.del_deg_perm)
 
-        past_date = timezone.now() - timedelta(days=3)
-        deg = Deg.objects.create(celsius=19.00, user=self.boss, date=past_date)
+        # past_date = timezone.now() - timedelta(days=30)
+        # self.deg = Deg.objects.create(celsius=19.00, user=self.boss, date=past_date)
+
+    def tearDown(self):
+        pass
+        #self.deg.delete()
+
+    def test_usergrone(self):
+        self.assertIsNotNone(self.grone_user)
 
 
     def _extract_values(self, dataset):
@@ -68,21 +74,21 @@ class AquariumTest(LiveServerTestCase):
         self.assertEqual(200, response.status_code)
 
     def test_chart_create_timeseries(self):
-        chart = TodayChart(self.boss)
+        chart = TodayChart(self.grone_user)
         self.assertIsNotNone(chart, 'chart was not created.')
 
     def test_chart_getdataset_for_user_startdate_today_interval_today_nodata(self):
-        """ Uses the last values if no data are available today is not a good idea.
-        The data are 3 days old. It's better to use an explicit method: get_last_values.
+        """ Uses the last values if no data are available today or for the week.
         """
         # Precondition:
-        self.assertEqual(Deg.objects.count(), 1)
-        chart = TodayChart(self.boss)
+        last_deg = Deg.objects.last()
+        print(last_deg)
+        chart = TodayChart(self.grone_user)
         # par défaut le graphe utilise la date du jour et affiche les valeurs du jour
         dataset = chart.get_datasets(datatype='Deg')
         self.assertIsNotNone(dataset)
         values = self._extract_values(dataset)
-        self.assertFalse(len(values) > 0)
+        self.assertTrue(len(values) > 0)
 
 
     def test_ArchiveChart_for_today(self):
@@ -106,9 +112,10 @@ class AquariumTest(LiveServerTestCase):
         self.assertIsNotNone(dataset)
         values = self._extract_values(dataset)
         self.assertTrue(len(values) == 2)
+        d1.delete()
+        d2.delete()
 
     def test_get_first_day_of_week(self):
-        chart = CurrentWeekChart(self.boss)
         first = timezone.datetime(2017, 10, 2)
         today1 = timezone.datetime(2017, 10, 8)
         self.assertEqual(CurrentWeekChart.get_first_day_of_week(today1), first)
@@ -120,19 +127,20 @@ class AquariumTest(LiveServerTestCase):
         self.assertEqual(CurrentWeekChart.get_first_day_of_week(today4), first)
 
     def test_chart_getdataset_for_user_this_week(self):
-        chart = CurrentWeekChart(self.boss)
+        chart = CurrentWeekChart(self.grone_user)
         tnow = timezone.localtime()
         first_day_of_week = CurrentWeekChart.get_first_day_of_week(tnow)
         tyesterday = timezone.datetime(day=first_day_of_week.day,
                                        month=first_day_of_week.month, year=first_day_of_week.year,
                                        hour=8)
         tyesterday = timezone.make_aware(tyesterday)
-        Deg.objects.create(celsius=19.00, date=tyesterday, user=self.boss)
+        d = Deg.objects.create(celsius=19.00, date=tyesterday, user=self.grone_user)
         dataset = chart.get_datasets(datatype='Deg')
         self.assertIsNotNone(dataset)
         values = self._extract_values(dataset)
         self.assertTrue(len(values) > 0)
         self.assertEqual(values[0]['y'], Decimal('19.000'))
+        d.delete()
 
     def test_LastWeekChart(self):
         last_week_day = timezone.localtime() + timedelta(days=-7)
@@ -150,10 +158,10 @@ class AquariumTest(LiveServerTestCase):
             deg_hour_increment = 0.1
             start_time = day
             for i in range(0, 21):
-                print('start_time:', start_time)
+                #print('start_time:', start_time)
                 deg = Deg.objects.create(celsius=deg_start, user=self.boss, date=start_time)
                 degs.append(deg)
-                print(deg)
+                #print(deg)
                 start_time += timedelta(hours=1)
                 deg_start += deg_hour_increment
         # Testing the class
@@ -161,10 +169,9 @@ class AquariumTest(LiveServerTestCase):
         dataset = chart.get_datasets('Deg')
         values = self._extract_values(dataset)
         self.assertTrue(len(values) > 0)
-        print('-'*20)
-        for v in values:
-            pass
-            #print(v['x'], v['y'])
+        for d in degs:
+            d.delete()
+
 
 
 
