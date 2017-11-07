@@ -64,10 +64,10 @@ class ArchiveChart(Chart):
 
 
     def exists_today_data(self):
-        logging.debug("In exists_today_data")
-        d = Deg.objects.last()
+        logging.debug("In exists_today_data for user: %s", self.user.username)
+        d = Deg.objects.filter(user=self.user).last()
         if d:
-            logging.debug("Last degree:", d)
+            logging.debug("Last degree: %s", d)
             return timezone.localtime().date() == d.date.date()
         else:
             logging.debug("No last data found")
@@ -80,14 +80,14 @@ class ArchiveChart(Chart):
             return timezone.localtime()
         else:
             logging.debug("In get_end_day, after called exists_today_data: today data does not exist")
-            d = Deg.objects.last()
+            d = Deg.objects.filter(user=self.user).last()
             return d.date  # last hour of data
 
 
 class TodayChart(ArchiveChart):
 
     def __init__(self, user):
-        logging.info("Init of TodayChart")
+        logging.info("Init of TodayChart for user: %s", user.username)
         self.user = user
         d = Deg.objects.last()
         self.start_date = None
