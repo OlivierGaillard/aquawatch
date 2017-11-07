@@ -38,7 +38,11 @@
             </div>
             <div class="col-sm-6">
                 <h2>Température</h2>
-                {% render_chart todaychart "Deg" %}
+                {% if todaychart %}
+                   {% render_chart todaychart "Deg" %}
+                {% else %}
+                <p>{{ todaychartNoData }}</p>
+                {% endif %}
             </div>
     </div>
 
@@ -129,7 +133,7 @@
     <h1>Veuillez vous annoncer</h1>
     <h2>Données de démonstration</h2>
     <h3>Piscine</h3>
-    <p>Les données ont été enregistrées en 2016 et proviennent d'une piscine privées. Elles ont été
+    <p>Les données ont été enregistrées en 2016 et proviennent d'une piscine privée. Elles ont été
         copiées sur 2017.</p>
     <ul>
         <li>User: "grone"</li>
