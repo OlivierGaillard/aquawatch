@@ -5,7 +5,7 @@
 <div id="bienvenue" class="container">
     {% if request.user.is_authenticated %}
 
-<h1>Dernières mesures</h1>
+<h2>Dernières mesures</h2>
 
     <div class="row">
             <div class="col-sm-6">
@@ -91,7 +91,7 @@
         </div>
     </div>
 
-    <h1>Valeurs cette semaine</h1>
+    <h2>Valeurs cette semaine</h2>
 
         <div class="row">
             <div class="col-sm-6">
@@ -108,7 +108,7 @@
         </div>
 
 
-<h1>Derniers 30 jours</h1>
+<h2>Derniers 30 jours</h2>
 
     <div class="row">
         <div class="col-sm-6">
@@ -127,9 +127,20 @@
 
   {% else %}
     <h1>Veuillez vous annoncer</h1>
+    <h2>Données de démonstration</h2>
+    <h3>Piscine</h3>
+    <p>Les données ont été enregistrées en 2016 et proviennent d'une piscine privées. Elles ont été
+        copiées sur 2017.</p>
     <ul>
         <li>User: "grone"</li>
         <li>Password: "raspigrone"</li>
+    </ul>
+    <h3>Boîtier de test "live"</h3>
+    <p>Les données proviennent d'un boîtier connecté en novembre 2017 sur le service. S'il n'est plus
+    connecté ce sont les dernières mesures qui s'affichent.</p>
+    <ul>
+        <li>User: "raspi"</li>
+        <li>Password: "raspiwatcher2017"</li>
     </ul>
   {% endif %}
 </div>
