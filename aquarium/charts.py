@@ -4,11 +4,19 @@ from phweb.models import Deg, Ph, Redox
 from datetime import timedelta
 from django.utils import timezone
 import logging
+from django.conf import settings
 
 
 logname = 'server.log'
+level = logging.DEBUG
+if settings.LOGLEVEL:
+    if settings.LOGLEVEL == 'INFO':
+        level = logging.INFO
+    elif settings.LOGLEVEL == logging.CRITICAL:
+        level = logging.CRITICAL
+
 logging.basicConfig(format='%(levelname)s\t: %(asctime)s : %(message)s', filename=logname,
-                    filemode='a', level=logging.DEBUG)
+                    filemode='a', level=level)
 
 
 
@@ -87,18 +95,20 @@ class ArchiveChart(Chart):
 class TodayChart(ArchiveChart):
 
     def __init__(self, user):
-        logging.info("Init of TodayChart for user: %s", user.username)
+        logging.debug("Init of TodayChart for user: %s", user.username)
         self.user = user
-        d = Deg.objects.last()
+        d = Deg.objects.filter(user=self.user).last()
         self.start_date = None
         self.end_date = self.get_end_day()
-        if self.exists_today_data(): # TODO: test it
+        if self.exists_today_data():
+            logging.debug("Today data exists for user %s", user.username)
             self.start_date = self.get_today_date()  # today midnight
+            logging.debug("Today data date: %s", self.start_date)
         else:
-            # start = midnight of last day with data
+            logging.debug("No data for today for user %s", user.username)
             self.start_date = timezone.datetime(year=d.date.year, month=d.date.month, day=d.date.day)
             self.start_date = timezone.make_aware(self.start_date)
-            #self.end_date = d.date # last hour of data
+            logging.debug("No data. Start_date: %s / end_date: %s", self.start_date, self.end_date)
         super(TodayChart, self).__init__(self.user, self.start_date, self.end_date)
 
     def set_label(self, msg="", start_date_str="", end_date_str=""):
