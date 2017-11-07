@@ -84,6 +84,7 @@ class ArchiveChart(Chart):
 class TodayChart(ArchiveChart):
 
     def __init__(self, user):
+        logging.info("Init of TodayChart")
         self.user = user
         d = Deg.objects.last()
         self.start_date = None
