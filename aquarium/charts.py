@@ -3,6 +3,12 @@ from jchart.config import Axes, DataSet
 from phweb.models import Deg, Ph, Redox
 from datetime import timedelta
 from django.utils import timezone
+import logging
+
+
+logname = 'server.log'
+logging.basicConfig(format='%(levelname)s\t: %(asctime)s : %(message)s', filename=logname,
+                    filemode='a', level=logging.DEBUG)
 
 
 
@@ -60,10 +66,10 @@ class ArchiveChart(Chart):
     def exists_today_data(self):
         d = Deg.objects.last()
         if d:
-            print("Last degree:", d)
+            logging.debug("Last degree:", d)
             return timezone.localtime().date() == d.date.date()
         else:
-            print("No last data found")
+            logging.debug("No last data found")
             return False
 
     def get_end_day(self):
