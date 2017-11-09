@@ -8,7 +8,7 @@
 <h2>Dernières mesures</h2>
 
     <div class="row">
-            <div class="col-sm-6">
+            <div class="col-sm-12">
                 <table class="table">
                   <thead>
                      <tr>
@@ -36,7 +36,10 @@
                   </tr>
                 </table>
             </div>
-            <div class="col-sm-6">
+    </div>
+
+    <div class="row">
+            <div class="col-sm-12">
                 <h2>Température</h2>
                 {% if todaychart %}
                    {% render_chart todaychart "Deg" %}
@@ -48,11 +51,13 @@
 
 
     <div class="row">
-            <div class="col-sm-6">
+            <div class="col-sm-12">
                 <h2>pH</h2>
                 {% render_chart todaychart "pH" %}
             </div>
-            <div class="col-sm-6">
+    </div>
+    <div class="row">
+            <div class="col-sm-12">
                 <h2>Redox</h2>
                 {% render_chart todaychart "Redox" %}
             </div>
@@ -98,15 +103,13 @@
     <h2>Valeurs cette semaine</h2>
 
         <div class="row">
-            <div class="col-sm-6">
+            <div class="col-sm-12">
                 {% render_chart week_chart "Deg" %}
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-12">
                 {% render_chart week_chart "pH" %}
             </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-6">
+            <div class="col-sm-12">
                 {% render_chart week_chart "Redox" %}
             </div>
         </div>
@@ -115,15 +118,13 @@
 <h2>Derniers 30 jours</h2>
 
     <div class="row">
-        <div class="col-sm-6">
+        <div class="col-sm-12">
             {% render_chart last_30days_chart "Deg" %}
         </div>
-        <div class="col-sm-6">
+        <div class="col-sm-12">
             {% render_chart last_30days_chart "pH" %}
         </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-8">
+        <div class="col-sm-12">
             {% render_chart last_30days_chart "Redox" %}
         </div>
     </div>
