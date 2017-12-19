@@ -22,4 +22,3 @@ class PiscineAdmin(admin.ModelAdmin):
 
 admin.site.register(Piscine, PiscineAdmin)
 
-

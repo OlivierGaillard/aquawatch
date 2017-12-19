@@ -20,6 +20,8 @@ from rest_framework.schemas import get_schema_view
 from phweb import views
 from aquarium import views as aquaviews
 
+from django.contrib.auth.views import logout
+
 router = routers.SimpleRouter()
 router.register(r'deg', views.DegreeViewSet, base_name='deg')
 router.register(r'ph', views.PhViewSet, base_name='ph')
@@ -30,6 +32,7 @@ schema_view = get_schema_view(title='Pastebin API')
 
 urlpatterns = [
     url(r'^schema/$', schema_view),
+    url(r'^logout/$', logout, name='logout'),
     url(r'^$', aquaviews.IndexView.as_view()),
     url(r'^year/$', aquaviews.YearView.as_view(), name='year'),
     url(r'^archive_of_year/([0-9]{4})/$', aquaviews.get_graph_year, name='archive_year'),

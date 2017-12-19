@@ -59,7 +59,6 @@ class AquariumTest(LiveServerTestCase):
     def test_usergrone(self):
         self.assertIsNotNone(self.grone_user)
 
-
     def _extract_values(self, dataset):
         #print(dataset, len(dataset))
         mesure = dataset[0]

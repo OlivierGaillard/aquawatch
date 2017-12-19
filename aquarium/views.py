@@ -15,7 +15,10 @@ class IndexView(TemplateView):
             context['deg']   = Deg.objects.filter(user=user).last()
             context['ph']    = Ph.objects.filter(user=user).last()
             context['redox'] = Redox.objects.filter(user=user).last()
-            context['todaychart'] = TodayChart(user)
+            try:
+                context['todaychart'] = TodayChart(user)
+            except Exception:
+                context['todaychartNoData'] = "Sorry. No data are available."
             context['week_chart'] = CurrentWeekChart(user)
             context['last_week_chart'] = LastWeekChart(user)
             context['last_30days_chart'] = Last30DaysChart(user)

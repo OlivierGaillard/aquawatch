@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 
-# Create your models here.
+
 
 class Deg(models.Model):
     celsius = models.DecimalField(decimal_places=3, max_digits=5)
