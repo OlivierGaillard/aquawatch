@@ -89,7 +89,10 @@ class ArchiveChart(Chart):
         else:
             logging.debug("In get_end_day, after called exists_today_data: today data does not exist")
             d = Deg.objects.filter(user=self.user).last()
-            return d.date  # last hour of data
+            if d:
+                return d.date  # last hour of data
+            else:
+                return timezone.localtime().date()
 
 
 class TodayChart(ArchiveChart):
