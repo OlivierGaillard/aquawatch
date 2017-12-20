@@ -14,6 +14,10 @@ if settings.LOGLEVEL:
         level = logging.INFO
     elif settings.LOGLEVEL == logging.CRITICAL:
         level = logging.CRITICAL
+    elif settings.LOGLEVEL == logging.DEBUG:
+        level = logging.DEBUG
+    else:
+        level = logging.DEBUG
 
 logging.basicConfig(format='%(levelname)s\t: %(asctime)s : %(message)s', filename=logname,
                     filemode='a', level=level)
@@ -90,9 +94,11 @@ class ArchiveChart(Chart):
             logging.debug("In get_end_day, after called exists_today_data: today data does not exist")
             d = Deg.objects.filter(user=self.user).last()
             if d:
+                logging.debug("Returning last Deg data.")
                 return d.date  # last hour of data
             else:
-                return timezone.localtime().date()
+                logging.debug("Returning Exception: No data")
+                return Exception("No data")
 
 
 class TodayChart(ArchiveChart):

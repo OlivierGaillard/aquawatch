@@ -19,9 +19,9 @@ class IndexView(TemplateView):
                 context['todaychart'] = TodayChart(user)
             except Exception:
                 context['todaychartNoData'] = "Sorry. No data are available."
-            context['week_chart'] = CurrentWeekChart(user)
-            context['last_week_chart'] = LastWeekChart(user)
-            context['last_30days_chart'] = Last30DaysChart(user)
+            #context['week_chart'] = CurrentWeekChart(user)
+            #context['last_week_chart'] = LastWeekChart(user)
+            #context['last_30days_chart'] = Last30DaysChart(user)
         return context
 
 
