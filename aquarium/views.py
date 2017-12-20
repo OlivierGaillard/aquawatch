@@ -1,9 +1,14 @@
 from django.views.generic import TemplateView
 from django.shortcuts import render
 from django.utils import timezone
-from phweb.models import Deg, Ph, Redox
+from phweb.models import Deg, Ph, Redox, Piscine
 from aquarium.charts import TodayChart, CurrentWeekChart, ArchiveChart, LastWeekChart, Last30DaysChart, YearChart
 from .forms import DegreeChartForm
+
+
+def check_user_has_pool(user):
+    piscine_id_list = [piscine.user for piscine in Piscine.objects.all()]
+    return user in piscine_id_list
 
 class IndexView(TemplateView):
     template_name = 'aquarium/index.html'
@@ -11,6 +16,11 @@ class IndexView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(IndexView, self).get_context_data(**kwargs)
         user = self.request.user
+        if not check_user_has_pool(user):
+            context['user_has_no_pool'] = user
+            return context
+        else:
+            context['user_has_pool'] = user
         if (not user is None) and user.is_authenticated():
             context['deg']   = Deg.objects.filter(user=user).last()
             context['ph']    = Ph.objects.filter(user=user).last()
@@ -19,9 +29,9 @@ class IndexView(TemplateView):
                 context['todaychart'] = TodayChart(user)
             except Exception:
                 context['todaychartNoData'] = "Sorry. No data are available."
-            #context['week_chart'] = CurrentWeekChart(user)
-            #context['last_week_chart'] = LastWeekChart(user)
-            #context['last_30days_chart'] = Last30DaysChart(user)
+            context['week_chart'] = CurrentWeekChart(user)
+            context['last_week_chart'] = LastWeekChart(user)
+            context['last_30days_chart'] = Last30DaysChart(user)
         return context
 
 

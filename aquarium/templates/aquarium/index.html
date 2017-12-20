@@ -3,7 +3,9 @@
 {% load jchart %}
 {% block content %}
 <div id="bienvenue" class="container">
-    {% if request.user.is_authenticated %}
+    {% if request.user.is_authenticated and user_has_pool%}
+    <h3>Schema REST</h3>
+    <p>La description du service est accessible <a href="schema/">ici.</a></p>
 
 <h2>Dernières mesures</h2>
 
@@ -129,7 +131,8 @@
         </div>
     </div>
 
-
+  {% elif request.user.is_authenticated and user_has_no_pool %}
+    <h3>You don't have pool data, dear user <em>{{user}}</em>.</h3>
   {% else %}
     <h1>Veuillez vous annoncer</h1>
     <h2>Données de démonstration</h2>
@@ -147,6 +150,9 @@
         <li>User: "raspi"</li>
         <li>Password: "raspiwatcher2017"</li>
     </ul>
+    <h3>Schema REST</h3>
+    <p>Une fois annoncé vous avez accès au schéma REST.</p>
+
   {% endif %}
 </div>
 
