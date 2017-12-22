@@ -19,8 +19,7 @@ from rest_framework import routers
 from rest_framework.schemas import get_schema_view
 from phweb import views
 from aquarium import views as aquaviews
-
-from django.contrib.auth.views import logout
+from rest_framework_jwt.views import refresh_jwt_token
 
 router = routers.SimpleRouter()
 router.register(r'deg', views.DegreeViewSet, base_name='deg')
@@ -31,14 +30,20 @@ schema_view = get_schema_view(title='Pastebin API')
 
 
 urlpatterns = [
+    url(r'^', include('rest_auth.urls')),
+    url(r'^registration/', include('rest_auth.registration.urls')),
+    url(r'^rest-auth/', include('rest_auth.urls')),
+    url(r'^rest-auth/registration/', include('rest_auth.registration.urls')),
+    url(r'^refresh-token/', refresh_jwt_token),
     url(r'^schema/$', schema_view),
-    url(r'^logout/$', logout, name='logout'),
     url(r'^$', aquaviews.IndexView.as_view()),
     url(r'^year/$', aquaviews.YearView.as_view(), name='year'),
     url(r'^archive_of_year/([0-9]{4})/$', aquaviews.get_graph_year, name='archive_year'),
     url(r'^admin/', admin.site.urls),
-    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    # required? It seems not.
+    #url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^', include(router.urls)),
+    # required? yes
     url(r'^accounts/', include('accounts.urls', namespace="accounts")),
     #url(r'^docs/', include('django_mkdocs.urls', namespace='documentation')),
 ]
