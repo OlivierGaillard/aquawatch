@@ -7,5 +7,6 @@ app_name = 'accounts'
 urlpatterns = [
     url(r'^login/$', MyLoginView.as_view(), name='login'),
     url(r'^thanks/$', ThanksView.as_view(), name='thanks'),
-    url(r'^logout/$', logout, {'next_page': '/accounts/thanks/',  }, name='logout'),
+    #url(r'^logout/$', logout, {'next_page': '/accounts/thanks/',  }, name='logout'),
+    url(r'^logout/$', logout, name='logout'),
     ]
