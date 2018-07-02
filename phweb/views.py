@@ -1,6 +1,6 @@
 from django.views.decorators.csrf import csrf_exempt
-from .models import Deg, Ph, Redox
-from .serializers import DegreeSerializer, PhSerializer, RedoxSerializer
+from .models import Deg, Ph, Redox, Piscine
+from .serializers import DegreeSerializer, PhSerializer, RedoxSerializer, PiscineSerializer
 from rest_framework import viewsets
 from rest_framework.decorators import detail_route, list_route
 from rest_framework.parsers import JSONParser
@@ -109,3 +109,11 @@ class RedoxViewSet(viewsets.ModelViewSet):
         redox.delete()
         return HttpResponse({'status': 'redox deleted'})
 
+
+class PiscineViewSet(viewsets.ModelViewSet):
+
+    serializer_class = PiscineSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        return Piscine.objects.filter(user=user)

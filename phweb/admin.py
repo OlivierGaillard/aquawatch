@@ -18,7 +18,7 @@ class RedoxAdmin(admin.ModelAdmin):
 admin.site.register(Redox, RedoxAdmin)
 
 class PiscineAdmin(admin.ModelAdmin):
-    list_display = ('id', 'capacity', 'user')
+    list_display = ('id', 'capacity', 'user', 'enable_shutdown')
 
 admin.site.register(Piscine, PiscineAdmin)
 

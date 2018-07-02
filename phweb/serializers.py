@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Deg, Ph, Redox
+from .models import Deg, Ph, Redox, Piscine
 
 class DegreeSerializer(serializers.HyperlinkedModelSerializer):
     user = serializers.ReadOnlyField(source='user.username')
@@ -21,3 +21,10 @@ class RedoxSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Redox
         fields = ('id', 'redoxval', 'date', 'user')
+
+class PiscineSerializer(serializers.HyperlinkedModelSerializer):
+    user = serializers.ReadOnlyField(source='user.username')
+
+    class Meta:
+        model = Piscine
+        fields = ('user', 'enable_shutdown')

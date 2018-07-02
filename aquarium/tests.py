@@ -27,7 +27,9 @@ class AquariumTest(LiveServerTestCase):
 
 
     def setUp(self):
-        self.grone_user = User.objects.get(username="grone")
+
+        self.grone_user = User.objects.create_user(username="grone", password="raspigrone",
+                                                   email="info@aquawatch.ch")
         self.user_boss_passwd = 'titi_grognon234'
         self.user_boss = 'Boss'
         self.boss = User.objects.create_user(username=self.user_boss, password=self.user_boss_passwd,
