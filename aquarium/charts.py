@@ -82,8 +82,19 @@ class ArchiveChart(Chart):
             logging.debug("Last degree: %s", d)
             return timezone.localtime().date() == d.date.date()
         else:
-            logging.debug("No last data found")
-            return False
+            logging.debug("No last data found for degrees. Trying pH values")
+            ph = Ph.objects.filter(user=self.user).last()
+            if ph:
+                logging.debug("Last pH: %s", ph)
+                return timezone.localtime().date() == ph.date.date()
+            else:
+                logging.debug("No last data found for pH. Trying redox values")
+                rdox = Redox.objects.filter(user=self.user).last()
+                if rdox:
+                    logging.debug("Last redox: %s", rdox)
+                    return timezone.localtime().date() == rdox.date.date()
+                else:
+                    return False
 
     def get_end_day(self):
         """Get the last hour of data: today or in the past."""
