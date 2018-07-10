@@ -49,6 +49,8 @@ class Piscine(models.Model):
     user = models.ForeignKey(User, null=True)
     capacity = models.IntegerField(verbose_name="Capacité en litres")
     enable_shutdown = models.BooleanField(default=False)
-    
+    do_update = models.BooleanField(default=False)
+
+
 
 
