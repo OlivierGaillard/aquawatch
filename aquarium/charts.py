@@ -178,10 +178,10 @@ class YearChart(ArchiveChart):
 
     def __init__(self, user):
         self.user = user
-        t0 = timezone.datetime(year=2016, month=5, day=1)
+        t0 = timezone.datetime(year=2018, month=7, day=1)
         t0 = timezone.make_aware(t0)
         self.start_date = t0
-        self.end_date = timezone.datetime(year=2016, month=11, day=1)
+        self.end_date = timezone.datetime(year=2018, month=11, day=1)
         self.end_date = timezone.make_aware(self.end_date)
         super(YearChart, self).__init__(self.user, self.start_date, self.end_date)
 
