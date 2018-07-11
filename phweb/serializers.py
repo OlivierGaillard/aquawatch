@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Deg, Ph, Redox, Piscine
+from .models import Deg, Ph, Redox, Piscine, Battery
 
 class DegreeSerializer(serializers.HyperlinkedModelSerializer):
     user = serializers.ReadOnlyField(source='user.username')
@@ -28,3 +28,12 @@ class PiscineSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Piscine
         fields = ('user', 'enable_shutdown', 'do_update')
+
+
+class BatterySerializer(serializers.HyperlinkedModelSerializer):
+    user = serializers.ReadOnlyField(source='user.username')
+
+    class Meta:
+        model = Battery
+        fields = ('user', 'battery_charge')
+

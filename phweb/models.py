@@ -52,5 +52,11 @@ class Piscine(models.Model):
     do_update = models.BooleanField(default=False)
 
 
+class Battery(models.Model):
+    user = models.ForeignKey(User, null=True)
+    date = models.DateTimeField(default=timezone.now)
+    battery_charge = models.IntegerField(verbose_name="Charge in percent", default=1)
+
+
 
 

@@ -1,6 +1,6 @@
 from django.views.decorators.csrf import csrf_exempt
-from .models import Deg, Ph, Redox, Piscine
-from .serializers import DegreeSerializer, PhSerializer, RedoxSerializer, PiscineSerializer
+from .models import Deg, Ph, Redox, Piscine, Battery
+from .serializers import DegreeSerializer, PhSerializer, RedoxSerializer, PiscineSerializer, BatterySerializer
 from rest_framework import viewsets
 from rest_framework.decorators import detail_route, list_route
 from rest_framework.parsers import JSONParser
@@ -117,3 +117,27 @@ class PiscineViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         user = self.request.user
         return Piscine.objects.filter(user=user)
+
+
+class BatteryViewSet(viewsets.ModelViewSet):
+    serializer_class = BatterySerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        return Battery.objects.filter(user=user).order_by('-date')
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+    @detail_route(methods=['POST'])
+    def update_charge(self, request, pk):
+        """Update battery charge. Will never be used but who knows?"""
+        battery = self.get_object()
+        serializer = BatterySerializer(data=request.data)
+        if serializer.is_valid():
+            battery.battery_charge = serializer.data['battery_charge']
+            battery.save()
+            return HttpResponse({'status': 'battery charge updated'})
+        else:
+            return HttpResponse(serializer.errors,
+                                status=status.HTTP_400_BAD_REQUEST)

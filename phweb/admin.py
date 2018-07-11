@@ -1,5 +1,5 @@
 from django.contrib import admin
-from phweb.models import Deg, Ph, Redox, Piscine
+from phweb.models import Deg, Ph, Redox, Piscine, Battery
 # Register your models here.
 
 class DegAdmin(admin.ModelAdmin):
@@ -21,4 +21,10 @@ class PiscineAdmin(admin.ModelAdmin):
     list_display = ('id', 'capacity', 'user', 'enable_shutdown', 'do_update')
 
 admin.site.register(Piscine, PiscineAdmin)
+
+
+class BatteryAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'date', 'battery_charge')
+
+admin.site.register(Battery, BatteryAdmin)
 
