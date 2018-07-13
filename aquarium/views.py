@@ -1,7 +1,7 @@
 from django.views.generic import TemplateView
 from django.shortcuts import render
 from django.utils import timezone
-from phweb.models import Deg, Ph, Redox, Piscine
+from phweb.models import Deg, Ph, Redox, Piscine, Battery
 from aquarium.charts import TodayChart, CurrentWeekChart, ArchiveChart, LastWeekChart, Last30DaysChart, YearChart
 from .forms import DegreeChartForm
 
@@ -25,6 +25,7 @@ class IndexView(TemplateView):
             context['deg']   = Deg.objects.filter(user=user).last()
             context['ph']    = Ph.objects.filter(user=user).last()
             context['redox'] = Redox.objects.filter(user=user).last()
+            context['battery'] = Battery.objects.filter(user=user).last()
             try:
                 context['todaychart'] = TodayChart(user)
             except Exception:

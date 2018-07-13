@@ -27,7 +27,7 @@ class PiscineSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Piscine
-        fields = ('user', 'enable_shutdown', 'do_update')
+        fields = ('user', 'enable_shutdown', 'do_update', 'time_beetween_readings')
 
 
 class BatterySerializer(serializers.HyperlinkedModelSerializer):

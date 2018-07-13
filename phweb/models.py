@@ -50,6 +50,7 @@ class Piscine(models.Model):
     capacity = models.IntegerField(verbose_name="Capacité en litres")
     enable_shutdown = models.BooleanField(default=False)
     do_update = models.BooleanField(default=False)
+    time_beetween_readings = models.SmallIntegerField(verbose_name="Time between two readings (hour)", default=6)
 
 
 class Battery(models.Model):
