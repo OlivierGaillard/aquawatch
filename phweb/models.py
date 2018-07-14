@@ -51,7 +51,7 @@ class Piscine(models.Model):
     enable_shutdown = models.BooleanField(default=False)
     enable_reading  = models.BooleanField(default=False)
     do_update = models.BooleanField(default=False)
-    time_beetween_readings = models.SmallIntegerField(verbose_name="Time between two readings (hour)", default=6)
+    hours_of_readings = models.CharField(max_length=50, default='8,13,19')
 
 
 class Battery(models.Model):
