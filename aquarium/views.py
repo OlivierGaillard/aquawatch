@@ -13,6 +13,22 @@ def check_user_has_pool(user):
 class IndexView(TemplateView):
     template_name = 'aquarium/index.html'
 
+    def ph_warning(self, ph):
+        if ph.phval < 7.5:
+            return (True, (7.5 - float(ph.phval)) )
+        elif ph.phval > 8.2:
+            return (True, (8.2 - float(ph.phval)) )
+        else:
+            return (False, 0)
+
+    def redox_warning(self, redox):
+        difference = abs(650 - float(redox.redoxval))
+        if difference > 200:
+            return (True, difference)
+        else:
+            return (False, difference)
+
+
     def get_context_data(self, **kwargs):
         context = super(IndexView, self).get_context_data(**kwargs)
         user = self.request.user
@@ -23,8 +39,17 @@ class IndexView(TemplateView):
             context['user_has_pool'] = user
         if (not user is None) and user.is_authenticated():
             context['deg']   = Deg.objects.filter(user=user).last()
-            context['ph']    = Ph.objects.filter(user=user).last()
-            context['redox'] = Redox.objects.filter(user=user).last()
+            ph = Ph.objects.filter(user=user).last()
+            context['ph']    = ph
+            ph_warning_difference = self.ph_warning(ph)
+            if ph_warning_difference[0]:
+                context['ph_warning'] = ph_warning_difference[1]
+            redox = Redox.objects.filter(user=user).last()
+            warning_and_difference = self.redox_warning(redox=redox)
+            context['redox'] = redox
+            if warning_and_difference[0]:
+                context['redox_warning'] = warning_and_difference[1]
+
             context['battery'] = Battery.objects.filter(user=user).last()
             try:
                 context['todaychart'] = TodayChart(user)

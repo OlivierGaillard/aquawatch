@@ -16,6 +16,7 @@
                      <tr>
                         <th>Mesure</th>
                         <th>Valeur</th>
+                        <th>Ecart</th>
                         <th>Date</th>
                      </tr>
                   </thead>
@@ -24,21 +25,35 @@
                   <tr>
                       <td>Temp.</td>
                       <td>{{deg.celsius}}</td>
+                      <td></td>
                       <td>{{deg.date|date:"d/m/Y H:i" }} </td>
                   </tr>
                   <tr>
-                      <td>pH</td>
+                      <td >pH</td>
+                      {% if ph_warning  %}
+                      <td><span class="label label-warning">{{ph.phval}}</span>
+                      <span class="label label-primary">(7.5 à 8.2)</span> </td>
+                      {% else %}
                       <td>{{ph.phval}}</td>
+                      {% endif %}
+                      <td>{% if ph_warning %}{{ph_warning|floatformat}}{% endif %}</td>
                       <td>{{ph.date|date:"d/m/Y H:i" }} </td>
                   </tr>
                   <tr>
                       <td>Redox</td>
+                      {% if redox_warning > 200 %}
+                      <td><span class="label label-danger">{{redox.redoxval|floatformat}}</span>
+                      <span class="label label-primary">(750 à 850 mV)</span> </td>
+                      {% else %}
                       <td>{{redox.redoxval}}</td>
+                      {% endif %}
+                      <td>{% if redox_warning %}{{redox_warning}}{% endif %}</td>
                       <td>{{redox.date|date:"d/m/Y H:i" }} </td>
                   </tr>
                   <tr>
                       <td>Niveau de charge batterie</td>
                       <td>{{battery.battery_charge}} %</td>
+                      <td></td>
                       <td>{{redox.date|date:"d/m/Y H:i" }} </td>
                   </tr>
 
