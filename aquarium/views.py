@@ -14,19 +14,23 @@ class IndexView(TemplateView):
     template_name = 'aquarium/index.html'
 
     def ph_warning(self, ph):
-        if ph.phval < 7.5:
-            return (True, (7.5 - float(ph.phval)) )
-        elif ph.phval > 8.2:
-            return (True, (8.2 - float(ph.phval)) )
-        else:
-            return (False, 0)
+        if ph:
+            if ph.phval < 7.5:
+                return (True, (7.5 - float(ph.phval)) )
+            elif ph.phval > 8.2:
+                return (True, (8.2 - float(ph.phval)) )
+            else:
+                return (False, 0)
+        return (False, 0)
 
     def redox_warning(self, redox):
-        difference = abs(650 - float(redox.redoxval))
-        if difference > 200:
-            return (True, difference)
-        else:
-            return (False, difference)
+        if redox:
+            difference = abs(650 - float(redox.redoxval))
+            if difference > 200:
+                return (True, difference)
+            else:
+                return (False, difference)
+        return (False, 0)
 
 
     def get_context_data(self, **kwargs):

@@ -52,6 +52,12 @@ class Piscine(models.Model):
     enable_reading  = models.BooleanField(default=False)
     do_update = models.BooleanField(default=False)
     hours_of_readings = models.CharField(max_length=50, default='8,13,19')
+    log_level = models.CharField(max_length=50, default='DEBUG')
+
+class PiscineLog(models.Model):
+    user = models.ForeignKey(User, null=True)
+    log = models.TextField()
+    date = models.DateField(default=timezone.now)
 
 
 class Battery(models.Model):

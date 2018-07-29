@@ -27,6 +27,7 @@ router.register(r'ph', views.PhViewSet, base_name='ph')
 router.register(r'redox', views.RedoxViewSet, base_name='redox')
 router.register(r'piscine', views.PiscineViewSet, base_name='piscine')
 router.register(r'battery', views.BatteryViewSet, base_name='battery')
+router.register(r'log', views.PiscineLogViewSet, base_name='log')
 
 schema_view = get_schema_view(title='Pastebin API')
 

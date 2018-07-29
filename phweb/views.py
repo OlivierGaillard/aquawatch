@@ -1,6 +1,7 @@
 from django.views.decorators.csrf import csrf_exempt
-from .models import Deg, Ph, Redox, Piscine, Battery
+from .models import Deg, Ph, Redox, Piscine, Battery, PiscineLog
 from .serializers import DegreeSerializer, PhSerializer, RedoxSerializer, PiscineSerializer, BatterySerializer
+from .serializers import PiscineLogSerializer
 from rest_framework import viewsets
 from rest_framework.decorators import detail_route, list_route
 from rest_framework.parsers import JSONParser
@@ -141,3 +142,13 @@ class BatteryViewSet(viewsets.ModelViewSet):
         else:
             return HttpResponse(serializer.errors,
                                 status=status.HTTP_400_BAD_REQUEST)
+
+class PiscineLogViewSet(viewsets.ModelViewSet):
+    serializer_class = PiscineLogSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        return PiscineLog.objects.filter(user=user).order_by('-date')
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
