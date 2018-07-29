@@ -57,7 +57,7 @@ class Piscine(models.Model):
 class PiscineLog(models.Model):
     user = models.ForeignKey(User, null=True)
     log = models.TextField()
-    date = models.DateField(default=timezone.now)
+    date = models.DateTimeField(default=timezone.now)
 
 
 class Battery(models.Model):
