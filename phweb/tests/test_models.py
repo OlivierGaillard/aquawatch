@@ -1,5 +1,5 @@
 from django.test import TestCase
-from phweb.models import Deg, Piscine, PiscineLog
+from phweb.models import Deg, Piscine, PiscineLog, Redox
 from phweb.serializers import DegreeSerializer
 from django.contrib.auth.models import User
 
@@ -20,10 +20,10 @@ class PiscineWatcherTest(TestCase):
         self.assertEqual(Deg.objects.count(), 3)
 
     def test_log(self):
-        log = PiscineLog(piscine=self.piscine)
+        log = PiscineLog(user=self.boss)
         log.msg = "Warning"
         self.assertIsNotNone(log.date)
 
-    def test_serializer(self):
-        serializer = DegreeSerializer()
-        #print(repr(serializer))
+    def test_redox_maxdigits(self):
+        rd = Redox.objects.create(redoxval=1000.3)
+        self.assertIsNotNone(rd)

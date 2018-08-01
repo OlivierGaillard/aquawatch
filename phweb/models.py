@@ -32,7 +32,7 @@ class Ph(models.Model):
         return "pH"
 
 class Redox(models.Model):
-    redoxval = models.DecimalField(decimal_places=1, max_digits=4)
+    redoxval = models.DecimalField(decimal_places=1, max_digits=5)
     date = models.DateTimeField(default=timezone.now)
     user = models.ForeignKey(User, null=True)
 
