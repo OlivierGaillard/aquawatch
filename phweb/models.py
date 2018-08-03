@@ -17,6 +17,9 @@ class Deg(models.Model):
     def get_graph_name():
         return "Température"
 
+    class Meta:
+        ordering = ['-date']
+
 class Ph(models.Model):
     phval = models.DecimalField(decimal_places=3, max_digits=5)
     date = models.DateTimeField(default=timezone.now)
@@ -30,6 +33,9 @@ class Ph(models.Model):
 
     def get_graph_name():
         return "pH"
+
+    class Meta:
+        ordering = ['-date']
 
 class Redox(models.Model):
     redoxval = models.DecimalField(decimal_places=1, max_digits=5)
@@ -45,6 +51,9 @@ class Redox(models.Model):
     def get_graph_name():
         return "Redox"
 
+    class Meta:
+        ordering = ['-date']
+
 class Piscine(models.Model):
     user = models.ForeignKey(User, null=True)
     capacity = models.IntegerField(verbose_name="Capacité en litres")
@@ -59,11 +68,17 @@ class PiscineLog(models.Model):
     log = models.TextField()
     date = models.DateTimeField(default=timezone.now)
 
+    class Meta:
+        ordering = ['-date']
+
 
 class Battery(models.Model):
     user = models.ForeignKey(User, null=True)
     date = models.DateTimeField(default=timezone.now)
     battery_charge = models.IntegerField(verbose_name="Charge in percent", default=1)
+
+    class Meta:
+        ordering = ['-date']
 
 
 
