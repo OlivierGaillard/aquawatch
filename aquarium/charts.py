@@ -77,19 +77,19 @@ class ArchiveChart(Chart):
 
     def exists_today_data(self):
         logging.debug("In exists_today_data for user: %s", self.user.username)
-        d = Deg.objects.filter(user=self.user).last()
+        d = Deg.objects.filter(user=self.user).first()
         if d:
             logging.debug("Last degree: %s", d)
             return timezone.localtime().date() == d.date.date()
         else:
             logging.debug("No last data found for degrees. Trying pH values")
-            ph = Ph.objects.filter(user=self.user).last()
+            ph = Ph.objects.filter(user=self.user).first()
             if ph:
                 logging.debug("Last pH: %s", ph)
                 return timezone.localtime().date() == ph.date.date()
             else:
                 logging.debug("No last data found for pH. Trying redox values")
-                rdox = Redox.objects.filter(user=self.user).last()
+                rdox = Redox.objects.filter(user=self.user).first()
                 if rdox:
                     logging.debug("Last redox: %s", rdox)
                     return timezone.localtime().date() == rdox.date.date()
@@ -103,7 +103,7 @@ class ArchiveChart(Chart):
             return timezone.localtime()
         else:
             logging.debug("In get_end_day, after called exists_today_data: today data does not exist")
-            d = Deg.objects.filter(user=self.user).last()
+            d = Deg.objects.filter(user=self.user).first()
             if d:
                 logging.debug("Returning last Deg data.")
                 return d.date  # last hour of data
@@ -117,7 +117,7 @@ class TodayChart(ArchiveChart):
     def __init__(self, user):
         logging.debug("Init of TodayChart for user: %s", user.username)
         self.user = user
-        d = Deg.objects.filter(user=self.user).last()
+        d = Deg.objects.filter(user=self.user).first()
         self.start_date = None
         self.end_date = self.get_end_day()
         if self.exists_today_data():

@@ -42,19 +42,19 @@ class IndexView(TemplateView):
         else:
             context['user_has_pool'] = user
         if (not user is None) and user.is_authenticated():
-            context['deg']   = Deg.objects.filter(user=user).last()
-            ph = Ph.objects.filter(user=user).last()
+            context['deg']   = Deg.objects.filter(user=user).first() # ordering is reversed: -date
+            ph = Ph.objects.filter(user=user).first()
             context['ph']    = ph
             ph_warning_difference = self.ph_warning(ph)
             if ph_warning_difference[0]:
                 context['ph_warning'] = ph_warning_difference[1]
-            redox = Redox.objects.filter(user=user).last()
+            redox = Redox.objects.filter(user=user).first()
             warning_and_difference = self.redox_warning(redox=redox)
             context['redox'] = redox
             if warning_and_difference[0]:
                 context['redox_warning'] = warning_and_difference[1]
 
-            context['battery'] = Battery.objects.filter(user=user).last()
+            context['battery'] = Battery.objects.filter(user=user).first()
             try:
                 context['todaychart'] = TodayChart(user)
             except Exception:
