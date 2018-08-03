@@ -1,11 +1,12 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 
 class Deg(models.Model):
-    celsius = models.DecimalField(decimal_places=3, max_digits=5)
+    celsius = models.DecimalField(decimal_places=3, max_digits=5, validators=[MinValueValidator(2)])
     date    = models.DateTimeField(default=timezone.now)
     user    = models.ForeignKey(User, null=True)
     def __str__(self):
@@ -21,7 +22,7 @@ class Deg(models.Model):
         ordering = ['-date']
 
 class Ph(models.Model):
-    phval = models.DecimalField(decimal_places=3, max_digits=5)
+    phval = models.DecimalField(decimal_places=3, max_digits=5, validators=[MinValueValidator(3, message="Trop acide pour être réel")])
     date = models.DateTimeField(default=timezone.now)
     user = models.ForeignKey(User, null=True)
 
@@ -38,7 +39,8 @@ class Ph(models.Model):
         ordering = ['-date']
 
 class Redox(models.Model):
-    redoxval = models.DecimalField(decimal_places=1, max_digits=5)
+    redoxval = models.DecimalField(decimal_places=1, max_digits=5, validators=[MinValueValidator(50),
+                                                                               MaxValueValidator(1111)])
     date = models.DateTimeField(default=timezone.now)
     user = models.ForeignKey(User, null=True)
 
