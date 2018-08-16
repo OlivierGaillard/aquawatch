@@ -60,6 +60,7 @@ class Piscine(models.Model):
     user = models.ForeignKey(User, null=True)
     capacity = models.IntegerField(verbose_name="Capacité en litres")
     enable_shutdown = models.BooleanField(default=False)
+    bigshutdown = models.BooleanField(default=False, help_text="Alarms disabled, power off")
     enable_reading  = models.BooleanField(default=False)
     do_update = models.BooleanField(default=False)
     hours_of_readings = models.CharField(max_length=50, default='8,13,19')
