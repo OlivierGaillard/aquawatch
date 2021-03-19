@@ -10,7 +10,7 @@ django-mkdocs==0.1.2
 djangorestframework==3.6.4
 idna==2.6
 itypes==1.1.0
-Jinja2==2.9.6
+Jinja2==2.11.3
 livereload==2.5.1
 Markdown==2.6.9
 MarkupSafe==1.0
